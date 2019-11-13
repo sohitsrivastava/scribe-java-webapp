@@ -3,7 +3,7 @@ node{
         git 'https://github.com/sohitsrivastava/scribe-java-webapp.git'
     }
     stage('Compile Package'){
-        def mvnHome = tool name: 'Maven', type: 'maven'
+        def mvnHome = tool name: 'maven', type: 'maven'
         sh "${mvnHome}/bin/mvn package"
     }
     stage('Copy War File to Repo'){ 
