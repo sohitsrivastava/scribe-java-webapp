@@ -1,7 +1,7 @@
 pipeline {
 
- agent master
- PROJECT_ROOT=""
+ agent none
+ PROJECT_ROOT=''
  stages{
  
 	stage("SCM Checkout"){
