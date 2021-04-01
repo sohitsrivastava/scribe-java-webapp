@@ -1,9 +1,10 @@
 pipeline {
 
  agent none
- 
+ environment {
+ 	PROJECT_ROOT=''
+ }
  stages{
- PROJECT_ROOT=''
 	stage("SCM Checkout"){
 		steps {
 			script {
