@@ -18,7 +18,7 @@ pipeline {
 		steps {
 			script {
 				echo "Building project"
-				PROJECT_ROOT="${WORKSPACE}/scripe-java-webapp"
+				PROJECT_ROOT="${WORKSPACE}/scribe-java-webapp"
 				dir("${PROJECT_ROOT}"){
 				pwd
 				sh "ls -lrt"
