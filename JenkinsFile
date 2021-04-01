@@ -21,7 +21,7 @@ pipeline {
 				PROJECT_ROOT="${WORKSPACE}/scripe-java-webapp"
 				dir("${PROJECT_ROOT}"){
 				pwd
-				ls -lrt
+				sh "ls -lrt"
 				sh "mvn clean package"
 				}
 			}
