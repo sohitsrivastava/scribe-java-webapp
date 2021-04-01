@@ -6,7 +6,7 @@ pipeline {
  
 	stage("SCM Checkout"){
 		echo "Git Checkout Stage"
-		git https://github.com/sohitsrivastava/scribe-java-webapp.git
+		git "https://github.com/sohitsrivastava/scribe-java-webapp.git"
 	}
 	stage("Build Stage"){
 		echo "Building project"
