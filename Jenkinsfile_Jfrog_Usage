@@ -1,0 +1,72 @@
+pipeline {
+
+ agent { label 'master' }
+ environment {
+ 	PROJECT_ROOT=''
+ }
+ stages{
+	stage("SCM Checkout"){
+		steps {
+			script {
+				echo "Git Checkout Stage"
+				git "https://github.com/sohitsrivastava/scribe-java-webapp.git"
+			}
+		}
+	
+	}
+	stage("Build Stage"){
+	    when{
+			    expression { return ACTION != "DEPLOY_ONLY" }
+		}
+		steps {
+			script {
+				echo "Building project"
+				PROJECT_ROOT="${WORKSPACE}"
+				dir("${PROJECT_ROOT}"){
+				pwd
+				sh "ls -lrt"
+				sh "mvn clean package"
+				sh "mv ./target/*.war ./target/scribe-java-webapp-${VERSION}.war"
+				}
+			}
+		}
+	}
+	stage("Upload to Artifactory"){
+	    when{
+			    anyOf {
+                    environment name: 'ACTION', value: 'BUILD_ONLY'
+					environment name: 'ACTION', value: 'BUILD_AND_DEPLOY'
+                }
+		}
+		steps {
+			script {	    
+	    withCredentials([usernamePassword(credentialsId: 'artifactory_creds', usernameVariable: 'username', passwordVariable: 'pass')]) {
+        sh '''
+        curl -u $username:$pass -X PUT "http://13.232.150.4:8080/artifactory/new-maven-local/${VERSION}/scribe-java-webapp.war" -T ${WORKSPACE}/target/*.war
+        '''
+  }
+			}
+		}
+	}
+	stage("Download from Artifactory"){
+	   when{
+	            not {
+                    environment name: 'ACTION', value: 'BUILD_ONLY'
+                }
+	   }
+		steps {
+			script {
+	    
+	    sh "mkdir -p ${WORKSPACE}/downloadedartifacts/${VERSION}"
+	    withCredentials([
+		string(credentialsId: 'artifactory_api_key', variable: 'API_KEY'),
+		string(credentialsId: 'artifactory_user', variable: 'username')]) {
+        sh '''
+        curl -u $username:$API_KEY -X GET "http://13.232.150.4:8080/artifactory/new-maven-local/${VERSION}/scribe-java-webapp.war" -o ${WORKSPACE}/downloadedartifacts/${VERSION}/scribe-java-webapp.war
+        '''
+  }
+			}
+		}
+	}
+ }
+}
