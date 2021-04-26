@@ -11,8 +11,8 @@ pipeline {
 			script {
 				echo "Git Checkout Stage"
 				newgitchkout([
-        URL='https://github.com/sohitsrivastava/scribe-java-webapp.git'
-        BRANCH='master'
+        URL : 'https://github.com/sohitsrivastava/scribe-java-webapp.git'
+        BRANCH : 'master'
         ])
 			}
 		}
