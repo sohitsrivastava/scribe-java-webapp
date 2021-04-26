@@ -1,0 +1,23 @@
+@Library('mysharedlibraries@master')_
+pipeline {
+
+ agent { label 'master' }
+ environment {
+ 	PROJECT_ROOT=''
+ }
+ stages{
+	stage("SCM Checkout"){
+		steps {
+			script {
+				echo "Git Checkout Stage"
+				newgitchkout([
+        URL='https://github.com/sohitsrivastava/scribe-java-webapp.git'
+        BRANCH='master'
+        ])
+			}
+		}
+	
+	}
+
+ }
+}
